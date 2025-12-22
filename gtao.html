@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GTA Online Map</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #0b0b0b;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+/* GTA Online style header */
+#gta-ui {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(15,15,15,0.95);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 6px;
+  letter-spacing: 1px;
+  font-weight: bold;
+  z-index: 1000;
+  box-shadow: 0 0 15px rgba(0,0,0,0.8);
+}
+
+#gta-ui span {
+  color: #f2c94c;
+}
+
+/* Layer control GTA look */
+.leaflet-control-layers {
+  background: rgba(15,15,15,0.95);
+  color: white;
+  border-radius: 6px;
+  border: none;
+}
+
+.leaflet-control-layers label {
+  color: white;
+  font-size: 13px;
+}
+
+/* Hide Leaflet attribution (GTA style) */
+.leaflet-control-attribution {
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div id="gta-ui">GTA <span>ONLINE</span> MAP</div>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+/* Create map */
+const map = L.map('map', {
+  crs: L.CRS.Simple,
+  minZoom: 0,
+  maxZoom: 6,
+  zoomControl: true
+});
+
+/* Tile layers (IMPORTANT: {z}-{x}_{y}.png) */
+const satellite = L.tileLayer('./satellite/{z}-{x}_{y}.png', {
+  tileSize: 256,
+  noWrap: true
+});
+
+const road = L.tileLayer('./road/{z}-{x}_{y}.png', {
+  tileSize: 256,
+  noWrap: true
+});
+
+const street = L.tileLayer('./street/{z}-{x}_{y}.png', {
+  tileSize: 256,
+  noWrap: true
+});
+
+const atlas = L.tileLayer('./atlas/{z}-{x}_{y}.png', {
+  tileSize: 256,
+  noWrap: true
+});
+
+/* Default layer */
+satellite.addTo(map);
+
+/* Layer switcher */
+const baseMaps = {
+  "Satellite": satellite,
+  "Road": road,
+  "Street": street,
+  "Atlas": atlas
+};
+
+L.control.layers(baseMaps, null, { collapsed: false }).addTo(map);
+
+/* Center map */
+map.setView([0, 0], 2);
+
+/* Optional: smooth zoom like GTA */
+map.options.zoomSnap = 0.25;
+map.options.zoomDelta = 0.25;
+</script>
+
+</body>
+</html>
 
